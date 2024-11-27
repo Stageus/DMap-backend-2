@@ -19,6 +19,8 @@
   "homepage": "https://github.com/Stageus/DMap-backend#readme",
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "mongodb": "^6.11.0",
+    "pg": "^8.13.1"
   }
 }
