@@ -6,8 +6,10 @@ app.use(express.json())
 
 // =============== 라우터 =============
 
-const accountRouter = require("./src/router/account/account")
-app.use("/account", accountRouter)
+
+// const accountRouter = require("./src/router/account/account")
+// app.use("/account", accountRouter)
+
 
 const trackingRouter = require("./src/router/tracking/tracking")
 app.use("/tracking", trackingRouter)
@@ -22,7 +24,10 @@ app.use("/search", searchRouter)
 // ============== 공통 에러 핸들러 ===========
 
 app.use((err,req,res,next) => {
-    console.err(err.stack)
+
+    console.log("들어갑니다.")
+    console.error(err.stack)
+
 
     res.status(err.status || 500).send({
         "message" : err.message
