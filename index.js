@@ -10,21 +10,20 @@ app.use(express.json())
 // const accountRouter = require("./src/router/account/account")
 // app.use("/account", accountRouter)
 
-
 const trackingRouter = require("./src/router/tracking/tracking")
 app.use("/tracking", trackingRouter)
 
-const snsRouter = require("./src/router/sns/sns")
-app.use("/sns", snsRouter)
+// const snsRouter = require("./src/router/sns/sns")
+// app.use("/sns", snsRouter)
 
-const searchRouter = require("./src/router/search/search")
-app.use("/search", searchRouter)
+// const searchRouter = require("./src/router/search/search")
+// app.use("/search", searchRouter)
+
 
 
 // ============== 공통 에러 핸들러 ===========
 
 app.use((err,req,res,next) => {
-
     console.log("들어갑니다.")
     console.error(err.stack)
 
