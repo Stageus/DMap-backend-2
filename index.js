@@ -1,10 +1,7 @@
 const express = require("express")
 const app = express()
 
-
 require("dotenv").config()
-
-
 
 
 app.use(express.json())
@@ -17,8 +14,9 @@ app.use(express.json())
 const trackingRouter = require("./src/router/tracking/tracking")
 app.use("/tracking", trackingRouter)
 
-// const snsRouter = require("./src/router/sns/sns")
-// app.use("/sns", snsRouter)
+
+const snsRouter = require("./src/router/sns/sns")
+app.use("/sns", snsRouter)
 
 // const searchRouter = require("./src/router/search/search")
 // app.use("/search", searchRouter)
@@ -29,7 +27,6 @@ app.use("/tracking", trackingRouter)
 app.use((err,req,res,next) => {
     console.log("들어갑니다.")
     console.error(err.stack)
-
 
     res.status(err.status || 500).send({
         "message" : err.message

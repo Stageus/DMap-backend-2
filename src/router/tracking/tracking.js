@@ -22,7 +22,6 @@ router.post("/",
     createTrackingImg
 )
 
-
 // 나의 트래킹 이미지 가져오기
 router.get("/",
     getMyTrackingImg
@@ -30,9 +29,7 @@ router.get("/",
 
 // 다른 사용자의 전체 트래킹 이미지 가져오기
 router.get("/account/:idx",
-
     checkData("account.user","idx"),
-
     getUserTrackingImg
 )
 
@@ -57,6 +54,4 @@ router.put("/:idx",
 router.put("/",
     checkSetData("idxList"),
 )
-
 module.exports = router 
-

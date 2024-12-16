@@ -6,7 +6,6 @@ const checkData = (what,input) => {
     return async (req,res,next) => {
         const value = req.body[input] || req.params[input] || req.query[input] || req.decoded[input]
         const sql = `SELECT * FROM ${what} WHERE ${input} = $1`
-
         
         try {
             const result = await client.query(sql, [value])
@@ -17,7 +16,6 @@ const checkData = (what,input) => {
         }
     }
 }
-
 
 const checkSetData = (array) => {
     return async (req,res,next) => {

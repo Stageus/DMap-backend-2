@@ -1,8 +1,6 @@
 const client = require("../../database/postgreSQL")
 const customError = require("../../middleware/customError")
-
 const {createTrackingImgSQL,getMyTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL} = require("./sql")
-
 
 // ================================== 공통 함수 ============================
 
@@ -151,4 +149,3 @@ const putSharingTrackingImg = async (req,res,next) => {
 }
 
 module.exports = {createTrackingImg,getMyTrackingImg,getUserTrackingImg,deleteTrackingImg,getTrackingLine,putTrackingImage}
-
