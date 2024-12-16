@@ -97,6 +97,7 @@ const checkBackground = (input) => {
             next()
         } catch (e) {
             next(e)
+
         }
     }
 }

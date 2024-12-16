@@ -2,10 +2,14 @@ const express = require("express")
 const app = express()
 
 
+require("dotenv").config()
+
+
+
+
 app.use(express.json())
 
 // =============== 라우터 =============
-
 
 // const accountRouter = require("./src/router/account/account")
 // app.use("/account", accountRouter)
@@ -18,7 +22,6 @@ app.use("/tracking", trackingRouter)
 
 // const searchRouter = require("./src/router/search/search")
 // app.use("/search", searchRouter)
-
 
 
 // ============== 공통 에러 핸들러 ===========
