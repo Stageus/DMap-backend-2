@@ -25,7 +25,6 @@ app.use("/sns", snsRouter)
 // ============== 공통 에러 핸들러 ===========
 
 app.use((err,req,res,next) => {
-    console.log("들어갑니다.")
     console.error(err.stack)
 
     res.status(err.status || 500).send({
