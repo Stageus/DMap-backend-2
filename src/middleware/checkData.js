@@ -1,4 +1,4 @@
-const customError = require("../middleware/customError")
+const customError = require("../util/customError")
 const client = require("../database/postgreSQL")
 
 

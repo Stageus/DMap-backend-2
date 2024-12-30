@@ -1,6 +1,6 @@
 const client = require("../../database/postgreSQL")
-const customError = require("../../middleware/customError")
-const {convertMultiLine,convertCenterPoint,convertFromMultiLine} = require("../../constant/constant")
+const customError = require("../../util/customError")
+const {convertMultiLine,convertCenterPoint,convertFromMultiLine} = require("../../util/util")
 
 const {getWhatTrackingImageSQL,getRecentTrackingImgSQL,getLikeCountTrackingImgSQL} = require("./sql")
 
