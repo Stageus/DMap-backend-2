@@ -1,8 +1,8 @@
 const router = require("express").Router()
 
-const {createTrackingImg,getMyTrackingImg,getUserTrackingImg,deleteTrackingImg,getTrackingLine,putTrackingImage} = require("./service")
+const {createTrackingImg,getMyTrackingImg,getUserTrackingImg,deleteTrackingImg,getTrackingLine,putTrackingImage,putToSharingTrackingImg,putToNotSharingTrackingImg} = require("./service")
 const {regColor,searchPoint} = require("../../constant/regx")
-const {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter} = require("../../middleware/checkInput")
+const {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter,checkIdxList} = require("../../middleware/checkInput")
 const {checkData,checkTrackingIdxData,checkSetData} = require("../../middleware/checkData")
 
 
@@ -34,8 +34,9 @@ router.get("/account/:user_idx",
 )
 
 // 나의 트래킹 이미지 삭제
-router.delete("/:tracking_idx",
-    checkTrackingIdxData(),
+router.delete("/",
+    checkIdxList("idxList"),
+    checkSetData("idxList"),
     deleteTrackingImg
 )
 
@@ -51,8 +52,17 @@ router.put("/:tracking_idx",
     putTrackingImage
 )
 
-// 트래킹 이미지 공유 상태 변경
+// 트래킹 이미지 공유 상태로 변경
 router.put("/",
     checkSetData("idxList"),
+    putToSharingTrackingImg
 )
+
+// // 트래킹 이미지 비공유 상태로 변경
+// router.put("/toNotSharing",
+//     checkSetData("idxList"),
+//     putToNotSharingTrackingImg
+// )
+
+
 module.exports = router 

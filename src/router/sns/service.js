@@ -2,16 +2,20 @@ const client = require("../../database/postgreSQL")
 const customError = require("../../util/customError")
 const {convertMultiLine,convertCenterPoint,convertFromMultiLine} = require("../../util/util")
 
-const {getWhatTrackingImageSQL,getRecentTrackingImgSQL,getLikeCountTrackingImgSQL} = require("./sql")
+const {getWhatTrackingImageSQL,getRecentTrackingImgSQL,getLikeCountTrackingImgSQL,defaultTrackingImgSQL} = require("./sql")
 
 
 // =========================== 서비스 ============================
 
 const getDefaultSNSPage = async (req,res,next) => {
     const {page} = req.query
+    const {user_idx} = req.body
 
     try{
-        const result = await client.query()
+        const result = await client.query(defaultTrackingImgSQL, [page,user_idx])
+        result.rows.forEach(obj => {
+            obj.line = convertFromMultiLine(obj.line)
+        });
 
         res.status(200).send({ message : result.rows })
     } catch(e){
@@ -101,4 +105,4 @@ const deleteLikeTrackingImg = async (req,res,next) => {
     }
 }
 
-module.exports = {postLikeTrackingImg,deleteLikeTrackingImg,getWhatTrackingImage,getRecentTrackingImg,getLikeCountTrackingImg}
+module.exports = {postLikeTrackingImg,deleteLikeTrackingImg,getWhatTrackingImage,getRecentTrackingImg,getLikeCountTrackingImg,getDefaultSNSPage}

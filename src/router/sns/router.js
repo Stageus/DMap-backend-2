@@ -4,11 +4,12 @@ const {regColor,searchPoint} = require("../../constant/regx")
 const {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter} = require("../../middleware/checkInput")
 const {checkData,checkTrackingIdxData,checkSetData,checkLike,checkNotLike} = require("../../middleware/checkData")
 
-const {postLikeTrackingImg,deleteLikeTrackingImg,getWhatTrackingImage,getRecentTrackingImg,getLikeCountTrackingImg} = require("./service")
+const {postLikeTrackingImg,deleteLikeTrackingImg,getWhatTrackingImage,getRecentTrackingImg,getLikeCountTrackingImg,getDefaultSNSPage} = require("./service")
 
 // SNS 페이지 기본 트래킹 이미지들 가져오기 ( 24시간 좋아요 순 )
 router.get("/list/default",
-
+    checkIdx("page"),
+    getDefaultSNSPage
 )
 // SNS 페이지 전체 좋아요 순 트래킹 이미지들 가져오기
 router.get("/list/like",

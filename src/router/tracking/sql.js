@@ -80,7 +80,7 @@ DELETE FROM
 WHERE 
     user_idx = $1 
 AND 
-    idx = $2
+    idx = ANY($2)
 `
 
 const getTrackingLineSQL =
@@ -124,7 +124,34 @@ WHERE
     user_idx = $8
 AND
     idx = $9
+`
+
+const toSharingImgSQL =
+`
+UPDATE 
+    tracking.list
+SET 
+    sharing = true
+WHERE 
+    idx = ANY($2)
+AND 
+    sharing = false
+AND 
+    user_idx = $1
+`
+
+const toNotSharingImgSQL =
+`
+UPDATE 
+    tracking.list
+SET 
+    sharing = false
+WHERE 
+    idx = ANY($2)
+    AND sharing = true;
+    AND user_idx = $1
 
 `
 
-module.exports = {createTrackingImgSQL,getMyTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL}
+
+module.exports = {createTrackingImgSQL,getMyTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL,toSharingImgSQL,toNotSharingImgSQL}

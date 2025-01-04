@@ -142,7 +142,19 @@ const checkCenter = (input) => {
     }
 }
 
+// idxSet 검증
+const checkIdxList = (input) => {
+    return (req,res,next) => {
+        const value = req.body[input] || req.params[input] || req.query[input]
 
+        try{
+            if(!Array.isArray(value)) throw customError (400, `${input} 양식 오류`)
+            next()
+        }catch(e){
+            next(e)
+        }
+    }
+}
 
-module.exports = {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter}
+module.exports = {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter,checkIdxList}
 

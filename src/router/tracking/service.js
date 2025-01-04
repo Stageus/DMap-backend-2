@@ -1,6 +1,6 @@
 const client = require("../../database/postgreSQL")
 const customError = require("../../util/customError")
-const {createTrackingImgSQL,getMyTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL} = require("./sql")
+const {createTrackingImgSQL,getMyTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL,toSharingImgSQL,toNotSharingImgSQL} = require("./sql")
 const {convertMultiLine,convertCenterPoint,convertFromMultiLine} = require("../../util/util")
 
 
@@ -56,11 +56,10 @@ const getUserTrackingImg = async (req,res,next) => {
 
 // 나의 트래킹 이미지 삭제
 const deleteTrackingImg = async (req,res,next) => {
-    const {user_idx} = req.body
-    const {tracking_idx} = req.params
+    const {user_idx,idxList} = req.body
 
     try{
-        await client.query(deleteTrackingImgSQL,[user_idx,tracking_idx])
+        await client.query(deleteTrackingImgSQL,[user_idx,idxList])
         res.status(200).send({})
     }catch(e){
         next(e)
@@ -100,8 +99,27 @@ const putTrackingImage = async (req,res,next) => {
 }
 
 // 트래킹 이미지 공유 상태 변경
-const putSharingTrackingImg = async (req,res,next) => {
-    const {idxSet} = req.body
+const putToSharingTrackingImg = async (req,res,next) => {
+    const {user_idx,idxList} = req.body
+
+    try{
+        await client.query(toSharingImgSQL,[user_idx,idxList])
+        res.status(200).send({})
+    }catch(e){
+        next(e)
+    }
 }
 
-module.exports = {createTrackingImg,getMyTrackingImg,getUserTrackingImg,deleteTrackingImg,getTrackingLine,putTrackingImage}
+// 트래킹 이미지 공유 상태 변경
+const putToNotSharingTrackingImg = async (req,res,next) => {
+    const {user_idx,idxList} = req.body
+
+    try{
+        await client.query(toNotSharingImgSQL,[user_idx,idxList])
+        res.status(200).send({})
+    }catch(e){
+        next(e)
+    }
+}
+
+module.exports = {createTrackingImg,getMyTrackingImg,getUserTrackingImg,deleteTrackingImg,getTrackingLine,putTrackingImage,putToSharingTrackingImg,putToNotSharingTrackingImg}
