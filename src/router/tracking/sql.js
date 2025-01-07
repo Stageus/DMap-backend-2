@@ -156,8 +156,10 @@ SET
     sharing = false
 WHERE 
     idx = ANY($2)
-    AND sharing = true;
-    AND user_idx = $1
+AND 
+    sharing = true
+AND 
+    user_idx = $1
 
 `
 

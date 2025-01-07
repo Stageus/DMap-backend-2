@@ -113,7 +113,7 @@ const putToSharingTrackingImg = async (req,res,next) => {
     }
 }
 
-// 트래킹 이미지 공유 상태 변경
+// 트래킹 비이미지 공유 상태로로 변경
 const putToNotSharingTrackingImg = async (req,res,next) => {
     const {user_idx,idxList} = req.body
 

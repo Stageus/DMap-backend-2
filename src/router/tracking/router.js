@@ -48,23 +48,23 @@ router.get("/:tracking_idx",
     getTrackingLine
 )
 
-// 트래킹 이미지 수정
-router.put("/:tracking_idx",
-    checkTrackingIdxData(),
-    putTrackingImage
-)
-
 // 트래킹 이미지 공유 상태로 변경
 router.put("/tosharing",
     checkSetData("idxList"),
     putToSharingTrackingImg
 )
 
-// // 트래킹 이미지 비공유 상태로 변경
-// router.put("/toNotSharing",
-//     checkSetData("idxList"),
-//     putToNotSharingTrackingImg
-// )
+// 트래킹 이미지 비공유 상태로 변경
+router.put("/toNotSharing",
+    checkSetData("idxList"),
+    putToNotSharingTrackingImg
+)
+
+// 트래킹 이미지 수정
+router.put("/:tracking_idx",
+    checkTrackingIdxData(),
+    putTrackingImage
+)
 
 
 module.exports = router 
