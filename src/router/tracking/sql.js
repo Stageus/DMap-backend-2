@@ -29,6 +29,10 @@ WHERE
     user_idx = $1
 ORDER BY 
     idx DESC
+LIMIT
+    20
+OFFSET
+    ($2 - 1) * 20
 `
 
 const getUserTrackingImgSQL =
@@ -71,6 +75,10 @@ AND
     sharing = true
 ORDER BY 
     idx DESC
+LIMIT
+    20
+OFFSET
+    ($3 - 1) * 20
 `
 
 const deleteTrackingImgSQL = 

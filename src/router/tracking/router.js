@@ -23,12 +23,14 @@ router.post("/",
 
 // 나의 트래킹 이미지 가져오기
 router.get("/",
+    checkIdx("page"),
     getMyTrackingImg
 )
 
 // 다른 사용자의 전체 트래킹 이미지 가져오기
 // 이거 페이지네이션 안함???
 router.get("/account/:user_idx",
+    checkIdx("page"),
     checkData("account.user","user_idx"),
     getUserTrackingImg
 )
@@ -53,7 +55,7 @@ router.put("/:tracking_idx",
 )
 
 // 트래킹 이미지 공유 상태로 변경
-router.put("/",
+router.put("/tosharing",
     checkSetData("idxList"),
     putToSharingTrackingImg
 )

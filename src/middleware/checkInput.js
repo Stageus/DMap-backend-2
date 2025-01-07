@@ -1,4 +1,5 @@
 const customError = require("../util/customError")
+const {regLike,regRecent,regDefault} = require("../constant/regx")
 
 // reg = 정규표현식, check = 들어올 key 값
 // 정규표현식으로 검증할 미들웨어
@@ -156,5 +157,18 @@ const checkIdxList = (input) => {
     }
 }
 
-module.exports = {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter,checkIdxList}
+const checkCategory = () => {
+    return (req,res,next) => {
+        const {category} = req.query
+
+        try{
+            if(!regDefault.test(category) && !regLike.test(category) && !regRecent.test(category)) throw customError (400, `category 양식 오류`)
+            next()
+        }catch(e){
+            next(e)
+        }
+    }
+}
+
+module.exports = {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter,checkIdxList,checkCategory}
 

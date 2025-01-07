@@ -8,11 +8,16 @@ const {getWhatTrackingImageSQL,getRecentTrackingImgSQL,getLikeCountTrackingImgSQ
 // =========================== 서비스 ============================
 
 const getDefaultSNSPage = async (req,res,next) => {
-    const {page} = req.query
+    const {page,category} = req.query
     const {user_idx} = req.body
 
+    let sql;
+    if(category == "default") sql = defaultTrackingImgSQL
+    if(category == "like") sql = getLikeCountTrackingImgSQL
+    if(category == "recent") sql = getRecentTrackingImgSQL 
+
     try{
-        const result = await client.query(defaultTrackingImgSQL, [page,user_idx])
+        const result = await client.query(sql, [page,user_idx])
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
         });
@@ -23,38 +28,6 @@ const getDefaultSNSPage = async (req,res,next) => {
     }
 }
 
-// 전체 좋아요 순 트래킹 이미지 가져오기
-const getLikeCountTrackingImg = async (req,res,next) => {
-    const {page} = req.query
-    const {user_idx} = req.body
-
-    try{
-        const result = await client.query(getLikeCountTrackingImgSQL, [page,user_idx])
-        result.rows.forEach(obj => {
-            obj.line = convertFromMultiLine(obj.line)
-        });
-        res.status(200).send({ message : result.rows })
-    }catch(e){
-        next(e)
-    }
-}
-
-
-// 최신순 트래킹 이미지 가져오기
-const getRecentTrackingImg = async (req,res,next) => {
-    const {page} = req.query
-    const {user_idx} = req.body
-
-    try{
-        const result = await client.query(getRecentTrackingImgSQL, [page,user_idx])
-        result.rows.forEach(obj => {
-            obj.line = convertFromMultiLine(obj.line)
-        });
-        res.status(200).send({ message : result.rows })
-    }catch(e){
-        next(e)
-    }
-}
 
 // 특정 트래킹 이미지 가져오기
 const getWhatTrackingImage = async (req, res, next) => {
@@ -105,4 +78,4 @@ const deleteLikeTrackingImg = async (req,res,next) => {
     }
 }
 
-module.exports = {postLikeTrackingImg,deleteLikeTrackingImg,getWhatTrackingImage,getRecentTrackingImg,getLikeCountTrackingImg,getDefaultSNSPage}
+module.exports = {postLikeTrackingImg,deleteLikeTrackingImg,getWhatTrackingImage,getDefaultSNSPage}

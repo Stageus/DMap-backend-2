@@ -24,10 +24,11 @@ const createTrackingImg = async (req,res,next) => {
 
 // 나의 트래킹 이미지 가져오기
 const getMyTrackingImg = async (req,res,next) => {
+    const {page} = req.query
     const {user_idx} = req.body
 
     try{
-        const result = await client.query(getMyTrackingImgSQL, [user_idx])
+        const result = await client.query(getMyTrackingImgSQL, [user_idx,page])
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
         });
@@ -41,9 +42,11 @@ const getMyTrackingImg = async (req,res,next) => {
 const getUserTrackingImg = async (req,res,next) => {
     const {user_idx} = req.params
     const {my_idx} = req.body
+    const {page} = req.query
+
     console.log(user_idx,my_idx)
     try{
-        const result = await client.query(getUserTrackingImgSQL, [user_idx,my_idx])
+        const result = await client.query(getUserTrackingImgSQL, [user_idx,my_idx,page])
 
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
