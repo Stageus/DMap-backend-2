@@ -66,12 +66,13 @@ const checkSetData = (array) => {
 
 const checkLike = () => {
   return async (req, res, next) => {
-    const { tracking_idx, user_idx } = req.body;
+    const { tracking_idx } = req.body;
+    const user_idx = req.decoded.idx;
     const sql = `SELECT * FROM tracking.like WHERE user_idx = $1 AND tracking_idx = $2`;
 
     try {
       const result = await client.query(sql, [user_idx, tracking_idx]);
-      console.log(result.rows);
+
       if (result.rows[0]) throw customError(403, `중복된 좋아요 요청 입니다.`);
       next();
     } catch (e) {
@@ -82,12 +83,13 @@ const checkLike = () => {
 
 const checkNotLike = () => {
   return async (req, res, next) => {
-    const { tracking_idx, user_idx } = req.body;
+    const { tracking_idx } = req.body;
+    const user_idx = req.decoded.idx;
     const sql = `SELECT * FROM tracking.like WHERE user_idx = $1 AND tracking_idx = $2`;
 
     try {
       const result = await client.query(sql, [user_idx, tracking_idx]);
-      console.log(result.rows[0]);
+
       if (!result.rows[0])
         throw customError(403, `중복된 좋아요 삭제 요청 입니다.`);
       else next();

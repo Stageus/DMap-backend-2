@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const checkLogin = require("./../../middleware/checkLogin");
+const {checkLogin} = require("./../../middleware/checkLogin");
 const trycatchWrapper = require("../../module/trycatchWrapper");
 const { checkIdx, checkNickname } = require("./../../middleware/checkInput");
 const checkDuplicate = require("./../../middleware/checkDuplicate");
@@ -36,6 +36,7 @@ router.get(
   "/login/naver",
   trycatchWrapper((req, res, next) => {
     res.redirect(getNaverLoginPage());
+    console.log("After:", getNaverLoginPage());
   })
 );
 

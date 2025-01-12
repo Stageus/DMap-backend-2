@@ -60,6 +60,5 @@ const adjectives = [
     "검독수리", "황새", "큰까치", "흰눈썹박새", "갈매기", "바다거북", "바다사자", "푸른앵무새", "바다독수리", "대왕문어"
   ];
   
-
-  console.log(adjectives[88] + nouns[165])
+module.exports = {nouns,adjectives}
 

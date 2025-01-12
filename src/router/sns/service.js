@@ -9,7 +9,7 @@ const {getWhatTrackingImageSQL,getRecentTrackingImgSQL,getLikeCountTrackingImgSQ
 
 const getDefaultSNSPage = async (req,res,next) => {
     const {page,category} = req.query
-    const {user_idx} = req.body
+    const user_idx = req.decoded ? req.decoded.idx : null;
 
     let sql;
     if(category == "default") sql = defaultTrackingImgSQL
@@ -22,7 +22,7 @@ const getDefaultSNSPage = async (req,res,next) => {
             obj.line = convertFromMultiLine(obj.line)
         });
 
-        res.status(200).send({ message : result.rows })
+        res.status(200).send({ tracking_image : result.rows })
     } catch(e){
         next(e)
     }
@@ -33,10 +33,10 @@ const getDefaultSNSPage = async (req,res,next) => {
 const getWhatTrackingImage = async (req, res, next) => {
     try {
         const { tracking_idx } = req.params;
-        const {user_idx} = req.body
+        const user_idx = req.decoded ? req.decoded.idx : null;
 
         const result = await client.query(getWhatTrackingImageSQL, [tracking_idx,user_idx]);
-        res.status(200).send({ message: result.rows });
+        res.status(200).send({ tracking_image: result.rows });
     } catch (e) {
         console.error("라우터에서 오류 발생:", e.message);
         next(e);
@@ -48,7 +48,8 @@ const getWhatTrackingImage = async (req, res, next) => {
 
 // 트래킹 이미지 좋아요
 const postLikeTrackingImg = async (req,res,next) => {
-    const {tracking_idx,user_idx} = req.body
+    const {tracking_idx} = req.body
+    const user_idx = req.decoded.idx;
     
     try{
         await client.query('BEGIN');
@@ -65,7 +66,8 @@ const postLikeTrackingImg = async (req,res,next) => {
 
 /// 미완성
 const deleteLikeTrackingImg = async (req,res,next) => {
-    const {tracking_idx,user_idx} = req.body
+    const {tracking_idx} = req.body
+    const user_idx = req.decoded.idx;
 
     try{
         await client.query('BEGIN');

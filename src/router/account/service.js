@@ -31,6 +31,7 @@ const getNaverLoginPage = () => {
   }&redirect_uri=${encodeURIComponent(
     process.env.NAVER_REDIRECT_URL
   )}&state=${state}`;
+
   return naverAuthUrl;
 };
 
@@ -216,6 +217,7 @@ const uploadS3 = multer({
     s3: s3,
     bucket: process.env.AWS_S3_BUCKET_NAME,
     acl: "public-read",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
     key: function (req, file, cb) {
       const fileName = Date.now().toString() + "-" + file.originalname;
       cb(null, fileName);
