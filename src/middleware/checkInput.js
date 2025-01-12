@@ -21,7 +21,7 @@ const checkRegInput = (reg, check) => {
 // idx가 숫자 인지 아닌지 판별하는 미들웨어
 const checkIdx = (input) => {
   return (req, res, next) => {
-    const value = req.body[input] || req.params[input] || req.query[input];
+    const value = req.body[input] || req.params[input] || req.query[input] || req.decoded[input]
     try {
       if (Number.isNaN(Number(value)) || !value)
         throw customError(400, `${input} 양식 오류`);
@@ -61,9 +61,7 @@ const checkHeading = (input) => {
 const checkSharing = (input) => {
   return (req, res, next) => {
     const value = req.body[input] ?? req.params[input] ?? req.query[input];
-    console.log(req.body.sharing);
     try {
-      console.log(value);
       if (
         value === undefined ||
         value === null ||
@@ -94,9 +92,7 @@ const checkThickness = (input) => {
 ////// 이거 좀 이상함 아마도 입력 값이 0값인 것에서 뭔가 문제가 생기는 듯
 const checkBackground = (input) => {
   return (req, res, next) => {
-    console.log(`req.body 는 : ${req.body.background}`);
     const value = req.params[input] ?? req.query[input] ?? req.body[input];
-    console.log(`value 는 : ${value}`);
     try {
       if (value !== 0 && value !== 1 && value !== 2)
         throw customError(400, `${input} 양식 오류`);

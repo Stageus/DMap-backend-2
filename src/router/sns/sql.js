@@ -31,8 +31,8 @@ SELECT
     tracking.list.background,
     tracking.list.createtime,
     tracking.list.updatetime,
-    account.user.nickname,
-    account.user.image,
+    account.list.nickname,
+    account.list.img_url,
     (CASE
         WHEN tracking.like.user_idx IS NOT NULL THEN true
         ELSE false
@@ -40,9 +40,9 @@ SELECT
 FROM 
     tracking.list
 INNER JOIN
-    account.user
+    account.list
 ON
-    tracking.list.user_idx = account.user.idx
+    tracking.list.user_idx = account.list.idx
 LEFT JOIN
     tracking.like
 ON

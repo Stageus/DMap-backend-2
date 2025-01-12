@@ -8,8 +8,8 @@ app.use(express.json())
 
 // =============== 라우터 =============
 
-// const accountRouter = require("./src/router/account/account")
-// app.use("/account", accountRouter)
+const accountRouter = require("./src/router/account/router")
+app.use("/account", accountRouter)
 
 const trackingRouter = require("./src/router/tracking/router")
 app.use("/tracking", trackingRouter)

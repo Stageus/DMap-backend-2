@@ -9,24 +9,41 @@ VALUES
 const getMyTrackingImgSQL = 
 `
 SELECT 
-    idx,
-    user_idx,
-    searchpoint,
-    ST_AsText(line) AS line,
-    ST_AsText(center) AS center,
-    zoom,
-    heading,
-    sharing,
-    likecount,
-    color,
-    thickness,
-    background,
-    createtime,
-    updatetime
+    tracking.list.idx,
+    tracking.list.user_idx,
+    tracking.list.searchpoint,
+    ST_AsText(tracking.list.line) AS line,
+    ST_AsText(tracking.list.center) AS center,
+    tracking.list.zoom,
+    tracking.list.heading,
+    tracking.list.sharing,
+    tracking.list.likecount,
+    tracking.list.color,
+    tracking.list.thickness,
+    tracking.list.background,
+    tracking.list.createtime,
+    tracking.list.updatetime,
+    account.list.nickname,
+    account.list.img_url,
+    (CASE
+        WHEN tracking.like.user_idx IS NOT NULL THEN true
+        ELSE false
+    END) AS liked_by_user
 FROM 
     tracking.list
+INNER JOIN
+    account.list
+ON
+    tracking.list.user_idx = account.list.idx
+LEFT JOIN
+    tracking.like
+ON
+    tracking.list.idx = tracking.like.tracking_idx
+    AND tracking.like.user_idx = $1
 WHERE 
-    user_idx = $1
+    tracking.list.user_idx = $1
+AND
+    sharing = true
 ORDER BY 
     idx DESC
 LIMIT
@@ -52,8 +69,8 @@ SELECT
     tracking.list.background,
     tracking.list.createtime,
     tracking.list.updatetime,
-    account.user.nickname,
-    account.user.image,
+    account.list.nickname,
+    account.list.img_url,
     (CASE
         WHEN tracking.like.user_idx IS NOT NULL THEN true
         ELSE false
@@ -61,9 +78,9 @@ SELECT
 FROM 
     tracking.list
 INNER JOIN
-    account.user
+    account.list
 ON
-    tracking.list.user_idx = account.user.idx
+    tracking.list.user_idx = account.list.idx
 LEFT JOIN
     tracking.like
 ON
