@@ -126,7 +126,7 @@ const postRefreshTokenLogic = async (refreshToken, userIdx) => {
 };
 
 // 닉네임--------------------------------------------------------------------------
-const { adjectives, nouns } = require("./../../constant/nickname");
+const { nouns, adjectives } = require("./../../constant/nickname");
 
 const getRandomWord = (list) => {
   const randomIndex = Math.floor(Math.random() * list.length);
@@ -137,7 +137,6 @@ const getNickname = async () => {
   // 만약에 경우의 수가 없는 상황도 생각을 해놓긴 해야한다.
   let checkVal = false;
   let nickname = null;
-  console.log(nickname);
 
   while (!checkVal) {
     const randomNoun = getRandomWord(nouns);
@@ -177,6 +176,8 @@ const postAccountLogic = async (platform, id, nickName) => {
 const getAccountInf = async (idx) => {
   const result = await client.query(getAccountSql, [idx]);
 
+  console.log(result.rows);
+
   if (result.rows.length == 0) {
     throw customError(404, "user_idx가 존재하지 않습니다.");
   }
@@ -202,6 +203,7 @@ const deleteAccountLogic = async (userIdx) => {
 const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
+const { contentType } = require("express/lib/response");
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -216,6 +218,7 @@ const uploadS3 = multer({
     s3: s3,
     bucket: process.env.AWS_S3_BUCKET_NAME,
     acl: "public-read",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
     key: function (req, file, cb) {
       const fileName = Date.now().toString() + "-" + file.originalname;
       cb(null, fileName);

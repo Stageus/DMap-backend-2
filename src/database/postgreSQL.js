@@ -1,14 +1,14 @@
-const { Pool } = require("pg")
+const { Pool } = require("pg");
 
 const client = new Pool({
-    "user" : "ubuntu",
-    "password" : process.env.PGSQL_PW,
-    "host" : "localhost",
-    "database" : "dmap",
-    "port" : 5432,
-    "max" : 10
-})
+  user: "ubuntu",
+  password: process.env.PGSQL_PW,
+  host: "localhost",
+  database: "dmap",
+  port: 5432,
+  max: 10,
+});
 
-client.connect()
+client.connect();
 
 module.exports = client;

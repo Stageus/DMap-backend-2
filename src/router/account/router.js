@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const checkLogin = require("./../../middleware/checkLogin");
 const trycatchWrapper = require("../../module/trycatchWrapper");
+const customError = require("../../util/customError");
 const { checkIdx, checkNickname } = require("./../../middleware/checkInput");
 const checkDuplicate = require("./../../middleware/checkDuplicate");
 
@@ -43,6 +44,7 @@ router.get(
   "/login/redirect/naver",
   trycatchWrapper(async (req, res, next) => {
     const { code, state } = req.query;
+    const { check } = req.body;
     let accessToken;
     let refreshToken;
     let userIdx = null;
@@ -115,7 +117,7 @@ router.delete(
 router.get(
   "/nickname",
   trycatchWrapper(async (req, res, next) => {
-    const list = getNicknameLogic(10);
+    const list = await getNicknameLogic(10);
     res.status(200).send({ nickname: list });
   })
 );
