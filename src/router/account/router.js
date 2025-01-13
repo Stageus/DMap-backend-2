@@ -1,8 +1,9 @@
 const router = require("express").Router();
-const {checkLogin} = require("./../../middleware/checkLogin");
+const { checkLogin } = require("./../../middleware/checkLogin");
 const trycatchWrapper = require("../../module/trycatchWrapper");
 const { checkIdx, checkNickname } = require("./../../middleware/checkInput");
 const checkDuplicate = require("./../../middleware/checkDuplicate");
+const jwt = require("jsonwebtoken");
 
 const { checkNicknameSql } = require("./sql");
 const {
@@ -91,11 +92,27 @@ router.get(
   "/info/:idx",
   checkIdx("idx"),
   trycatchWrapper(async (req, res, next) => {
-    const { idx } = req.params;
-    const { nickName, imgUrl } = await getAccountInf(idx);
+    const userIdx = req.params.idx;
+    const { authorization } = req.headers;
+    let isMine = false;
+
+    if (authorization) {
+      const { idx } = jwt.verify(
+        authorization,
+        process.env.ACCESS_TOKEN_SECRET
+      );
+      console.log(userIdx);
+      console.log(idx);
+      if (userIdx == idx) isMine = true;
+    }
+
+    const { nickName, imgUrl } = await getAccountInf(userIdx);
+
     res.status(200).send({
+      idx: userIdx,
       nickname: nickName,
       image_url: imgUrl,
+      isMine: isMine,
     });
   })
 );
