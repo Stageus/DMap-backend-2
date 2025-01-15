@@ -41,4 +41,15 @@ function convertFromMultiLine(multiLine) {
     return seperatedSegments;
 }
 
-module.exports = {convertMultiLine,convertCenterPoint,convertFromMultiLine}
+// PostgreGIS Point 를 변환하는 함수
+function convertPointToLatLng(pointString) {
+    // "POINT("와 ")" 제거
+    const coordinates = pointString.slice(6, -1);
+  
+    // 공백으로 나누어 추출
+    const [lng, lat] = coordinates.split(" ").map(Number);
+
+    return { lat: lat, lng: lng };
+}
+
+module.exports = {convertMultiLine,convertCenterPoint,convertFromMultiLine,convertPointToLatLng}

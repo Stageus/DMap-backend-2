@@ -19,8 +19,8 @@ app.use("/tracking", trackingRouter)
 const snsRouter = require("./src/router/sns/router")
 app.use("/sns", snsRouter)
 
-// const searchRouter = require("./src/router/search/search")
-// app.use("/search", searchRouter)
+const searchRouter = require("./src/router/search/router")
+app.use("/search", searchRouter)
 
 
 // ============== 공통 에러 핸들러 ===========
