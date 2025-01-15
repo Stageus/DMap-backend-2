@@ -37,6 +37,8 @@ const getWhatTrackingImage = async (req, res, next) => {
         const user_idx = req.decoded ? req.decoded.idx : null;
 
         const result = await client.query(getWhatTrackingImageSQL, [tracking_idx,user_idx]);
+        result.rows[0].line = convertFromMultiLine(result.rows[0].line)
+        result.rows[0].center = convertPointToLatLng(result.rows[0].center)
         res.status(200).send({ tracking_image: result.rows });
     } catch (e) {
         console.error("라우터에서 오류 발생:", e.message);
