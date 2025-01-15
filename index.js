@@ -19,8 +19,8 @@ app.use("/tracking", trackingRouter)
 const snsRouter = require("./src/router/sns/router")
 app.use("/sns", snsRouter)
 
-// const searchRouter = require("./src/router/search/search")
-// app.use("/search", searchRouter)
+const searchRouter = require("./src/router/search/router")
+app.use("/search", searchRouter)
 
 
 // ============== 공통 에러 핸들러 ===========
@@ -42,6 +42,6 @@ app.use((req,res,next) => {
 
 // ===========================================
 
-app.listen(8000, () => {
-    console.log("8000번 포트에서 웹 서버 실행")
+app.listen(8001, () => {
+    console.log("8001번 포트에서 웹 서버 실행")
 })
