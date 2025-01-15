@@ -1,7 +1,7 @@
 const client = require("../../database/postgreSQL")
 const customError = require("../../util/customError")
 const {createTrackingImgSQL,getMyTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL,toSharingImgSQL,toNotSharingImgSQL} = require("./sql")
-const {convertMultiLine,convertCenterPoint,convertFromMultiLine} = require("../../util/util")
+const {convertMultiLine,convertCenterPoint,convertFromMultiLine,convertPointToLatLng} = require("../../util/util")
 
 
 // ===================================== 서비스 ===================================
@@ -33,6 +33,7 @@ const getMyTrackingImg = async (req,res,next) => {
         const result = await client.query(getMyTrackingImgSQL, [user_idx,page])
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
+            obj.center = convertPointToLatLng(obj.center)
         });
         res.status(200).send({ tracking_image : result.rows })
     } catch(e){
@@ -51,6 +52,7 @@ const getUserTrackingImg = async (req,res,next) => {
 
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
+            obj.center = convertPointToLatLng(obj.center)
         });
         res.status(200).send({ tracking_image : result.rows })
     }catch(e){
@@ -81,6 +83,7 @@ const getTrackingLine = async (req,res,next) => {
         const result = await client.query(getTrackingLineSQL, [user_idx,tracking_idx])
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
+            obj.center = convertPointToLatLng(obj.center)
         });
         res.status(200).send({ message : result.rows })
     }catch(e){

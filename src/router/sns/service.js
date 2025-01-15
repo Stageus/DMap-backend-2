@@ -1,6 +1,6 @@
 const client = require("../../database/postgreSQL")
 const customError = require("../../util/customError")
-const {convertMultiLine,convertCenterPoint,convertFromMultiLine} = require("../../util/util")
+const {convertMultiLine,convertCenterPoint,convertFromMultiLine,convertPointToLatLng} = require("../../util/util")
 
 const {getWhatTrackingImageSQL,getRecentTrackingImgSQL,getLikeCountTrackingImgSQL,defaultTrackingImgSQL} = require("./sql")
 
@@ -20,6 +20,7 @@ const getDefaultSNSPage = async (req,res,next) => {
         const result = await client.query(sql, [page,user_idx])
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
+            obj.center = convertPointToLatLng(obj.center)
         });
 
         res.status(200).send({ tracking_image : result.rows })
