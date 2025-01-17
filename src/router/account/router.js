@@ -37,7 +37,6 @@ router.get(
   "/login/naver",
   trycatchWrapper((req, res, next) => {
     res.redirect(getNaverLoginPage());
-    console.log("After:", getNaverLoginPage());
   })
 );
 

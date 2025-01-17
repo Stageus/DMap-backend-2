@@ -1,5 +1,4 @@
-const postLikeTrackingImgSQL =
-`
+const postLikeTrackingImgSQL = `
 BEGIN
 INSERT INTO
     tracking.like (user_idx,tracking_idx)
@@ -12,10 +11,9 @@ SET
 WHERE
     idx = $3
 COMMIT;
-`
+`;
 
-const getWhatTrackingImageSQL =
-`
+const getWhatTrackingImageSQL = `
 SELECT 
     tracking.list.idx,
     tracking.list.user_idx,
@@ -51,11 +49,9 @@ ON
 WHERE 
     tracking.list.sharing = true
     AND tracking.list.idx = $1
-`
+`;
 
-
-const getRecentTrackingImgSQL =
-`
+const getRecentTrackingImgSQL = `
 SELECT 
     tracking.list.idx,
     tracking.list.user_idx,
@@ -96,10 +92,9 @@ LIMIT
     20
 OFFSET
     ($1 - 1) * 20
-`
+`;
 
-const getLikeCountTrackingImgSQL =
-`
+const getLikeCountTrackingImgSQL = `
 SELECT 
     tracking.list.idx,
     tracking.list.user_idx,
@@ -141,10 +136,9 @@ LIMIT
 OFFSET
     ($1 - 1) * 20;
 
-`
+`;
 
-const defaultTrackingImgSQL =
-`
+const defaultTrackingImgSQL = `
 SELECT 
     tracking_list.idx,
     tracking_list.user_idx,
@@ -194,8 +188,11 @@ LIMIT
 OFFSET 
     ($1 - 1) * 20;
 
-`
+`;
 
-
-
-module.exports = {getWhatTrackingImageSQL,getRecentTrackingImgSQL,getLikeCountTrackingImgSQL,defaultTrackingImgSQL}
+module.exports = {
+  getWhatTrackingImageSQL,
+  getRecentTrackingImgSQL,
+  getLikeCountTrackingImgSQL,
+  defaultTrackingImgSQL,
+};
