@@ -138,7 +138,6 @@ const getNickname = async () => {
   // 만약에 경우의 수가 없는 상황도 생각을 해놓긴 해야한다.
   let checkVal = false;
   let nickname = null;
-  console.log(nickname);
 
   while (!checkVal) {
     const randomNoun = getRandomWord(nouns);

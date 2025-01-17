@@ -1,19 +1,19 @@
 const client = require("./../../database/postgreSQL");
-const {
-  convertMultiLine,
-  convertCenterPoint,
-  convertFromMultiLine,
-} = require("../../util/util");
+const { convertFromMultiLine } = require("../../util/util");
 
 const { nicknameSearchSql, searchPointSearchSql } = require("./sql");
 
-const searchNicknameLogic = async (text) => {
-  const result = await client.query(nicknameSearchSql, [`%${text}%`]);
+const searchNicknameLogic = async (text, page) => {
+  const result = await client.query(nicknameSearchSql, [`%${text}%`, page]);
   return result.rows;
 };
 
-const searchPointLogic = async (text) => {
-  const result = await client.query(searchPointSearchSql, [`%${text}%`]);
+const searchPointLogic = async (userIdx, text, page) => {
+  const result = await client.query(searchPointSearchSql, [
+    userIdx,
+    `%${text}%`,
+    page,
+  ]);
   result.rows.forEach((obj) => {
     obj.line = convertFromMultiLine(obj.line);
     obj.center = {
