@@ -24,6 +24,14 @@ router.post("/",
     createTrackingImg
 )
 
+// 트래킹 라인 가져오기
+router.get("/:tracking_idx",
+    checkLogin,
+    checkIdx("idx"),
+    checkTrackingIdxData(),
+    getTrackingLine
+)
+
 // 나의 트래킹 이미지 가져오기
 router.get("/",
     checkLogin,
@@ -48,12 +56,6 @@ router.delete("/",
     checkSetData("idxList"),
     checkData("account.list","idx"),
     deleteTrackingImg
-)
-
-// 트래킹 라인 가져오기
-router.get("/:tracking_idx",
-    checkTrackingIdxData(),
-    getTrackingLine
 )
 
 // 트래킹 이미지 공유 상태로 변경

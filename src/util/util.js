@@ -1,10 +1,16 @@
 // 구글 맵에서 사용되는 데이터 PostgreGIS 형태로 변환
 function convertMultiLine(line) {
-    const multiLine = line.map((section) => 
-        `(${section.map((point) => `${point.lng} ${point.lat}`).join(", ")})`
-    ).join(", ");
+    const multiLine = line.map((section) => {
+        
+        // 각 선분(section)에 점이 1개만 있을 경우 동일한 점 추가
+        if (section.length === 1) {
+            section.push(section[0]);
+        }
+        
+        return `(${section.map((point) => `${point.lng} ${point.lat}`).join(", ")})`;
+    }).join(", ");
 
-    return `MULTILINESTRING(${multiLine})`
+    return `MULTILINESTRING(${multiLine})`;
 }
 
 // center 값을 GEOGRAPHY POINT 형태로 변환
@@ -41,4 +47,15 @@ function convertFromMultiLine(multiLine) {
     return seperatedSegments;
 }
 
-module.exports = {convertMultiLine,convertCenterPoint,convertFromMultiLine}
+// PostgreGIS Point 를 변환하는 함수
+function convertPointToLatLng(pointString) {
+    // "POINT("와 ")" 제거
+    const coordinates = pointString.slice(6, -1);
+  
+    // 공백으로 나누어 추출
+    const [lng, lat] = coordinates.split(" ").map(Number);
+
+    return { lat: lat, lng: lng };
+}
+
+module.exports = {convertMultiLine,convertCenterPoint,convertFromMultiLine,convertPointToLatLng}
