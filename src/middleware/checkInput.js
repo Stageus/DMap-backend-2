@@ -34,9 +34,9 @@ const checkIdx = (input) => {
 
 const checkZoom = (input) => {
   return (req, res, next) => {
-    const value = req.body[input] || req.params[input] || req.query[input];
+    const value = req.body[input] ?? req.params[input] ?? req.query[input];
     try {
-      if (!value || isNaN(value) || value < 0 || value > 22)
+      if (value === undefined || value === null || isNaN(value) || value < 0 || value > 22)
         throw customError(400, `${input} 양식 오류`);
       next();
     } catch (e) {
@@ -47,9 +47,9 @@ const checkZoom = (input) => {
 
 const checkHeading = (input) => {
   return (req, res, next) => {
-    const value = req.body[input] || req.params[input] || req.query[input];
+    const value = req.body[input] ?? req.params[input] ?? req.query[input];
     try {
-      if (!value || isNaN(value) || value < 0 || value > 360)
+      if (value === undefined || value === null || isNaN(value) || value < 0 || value > 360)
         throw customError(400, `${input} 양식 오류`);
       next();
     } catch (e) {
