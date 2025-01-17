@@ -42,8 +42,6 @@ ON
     AND tracking.like.user_idx = $1
 WHERE 
     tracking.list.user_idx = $1
-AND
-    sharing = true
 ORDER BY 
     idx DESC
 LIMIT

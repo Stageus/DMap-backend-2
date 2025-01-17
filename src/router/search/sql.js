@@ -48,6 +48,8 @@ ON
     AND tracking.list.user_idx = $1
 WHERE 
     tracking.list.searchpoint LIKE $2
+AND
+    sharing = true
 ORDER BY 
     tracking.list.idx DESC
 LIMIT
