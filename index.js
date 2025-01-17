@@ -18,9 +18,6 @@ app.use("/tracking", trackingRouter);
 const snsRouter = require("./src/router/sns/router");
 app.use("/sns", snsRouter);
 
-const snsRouter = require("./src/router/sns/router")
-app.use("/sns", snsRouter)
-
 const searchRouter = require("./src/router/search/router")
 app.use("/search", searchRouter)
 
