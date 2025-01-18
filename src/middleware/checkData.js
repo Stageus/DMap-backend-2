@@ -8,6 +8,7 @@ const checkData = (what, input) => {
       req.params[input] ||
       req.query[input] ||
       req.decoded[input];
+      console.log(value)
     const sql = `SELECT * FROM ${what} WHERE idx = $1`;
 
     try {

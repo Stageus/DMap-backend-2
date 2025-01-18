@@ -1,4 +1,5 @@
 const router = require("express").Router()
+const jwt = require("jsonwebtoken");
 
 const {createTrackingImg,getMyTrackingImg,getUserTrackingImg,deleteTrackingImg,getTrackingLine,putTrackingImage,putToSharingTrackingImg,putToNotSharingTrackingImg} = require("./service")
 const {regColor,searchPoint} = require("../../constant/regx")
@@ -33,21 +34,50 @@ router.get("/:tracking_idx",
 )
 
 // 나의 트래킹 이미지 가져오기
-router.get("/",
-    checkLogin,
-    checkIdx("idx"),
-    checkIdx("page"),
-    checkData("account.list","idx"),
-    getMyTrackingImg
+router.get("/account/:user_idx", async (req,res,next) => {
+    const { authorization } = req.headers
+    const { user_idx } = req.params
+    if (authorization) {
+        try {
+
+        req.decoded = jwt.verify(authorization, process.env.ACCESS_TOKEN_SECRET);
+
+        } catch (e) {
+            if (e.name === "TokenExpiredError") {
+                e.status = 401;
+                e.message = "만료된 access token 입니다.";
+            } else if (e.name === "JsonWebTokenError") {
+                e.status = 403;
+                e.message = "잘못된 access token 입니다.";
+            }
+            return next(e);
+        }
+        const my_idx = req.decoded.idx;
+        if(my_idx != user_idx){
+            await checkIdx("page")
+            await checkData("account.list", "user_idx")
+            return getUserTrackingImg(req, res, next);
+        } else if (my_idx == user_idx){
+            await checkIdx("idx")
+            await checkIdx("page")
+            await checkData("account.list","idx")
+            return getMyTrackingImg(req,res,next);
+        }
+    } else {
+        await checkIdx("page")
+        await checkData("account.list","user_idx")
+        return getUserTrackingImg(req,res,next)
+    }
+    }   
 )
 
-// 다른 사용자의 전체 트래킹 이미지 가져오기
-router.get("/account/:user_idx",
-    optionalLogin,
-    checkIdx("page"),
-    checkData("account.list","user_idx"),
-    getUserTrackingImg
-)
+// // 다른 사용자의 전체 트래킹 이미지 가져오기
+// router.get("/account/:user_idx",
+//     optionalLogin,
+//     checkIdx("page"),
+//     checkData("account.list","user_idx"),
+//     getUserTrackingImg
+// )
 
 // 나의 트래킹 이미지 삭제
 router.delete("/",
