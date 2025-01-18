@@ -217,5 +217,5 @@ module.exports = {
   checkCenter,
   checkIdxList,
   checkCategory,
-  checkNickname,
+  checkNickname
 };

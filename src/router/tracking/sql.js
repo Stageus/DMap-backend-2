@@ -6,7 +6,7 @@ VALUES
     ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
 `
 
-const getMyTrackingImgSQL = 
+const getMySharingTrackingImgSQL = 
 `
 SELECT 
     tracking.list.idx,
@@ -42,6 +42,54 @@ ON
     AND tracking.like.user_idx = $1
 WHERE 
     tracking.list.user_idx = $1
+AND
+    tracking.list.sharing = true
+ORDER BY 
+    idx DESC
+LIMIT
+    20
+OFFSET
+    ($2 - 1) * 20
+`
+
+const getMyNotSharingTrackingImgSQL = 
+`
+SELECT 
+    tracking.list.idx,
+    tracking.list.user_idx,
+    tracking.list.searchpoint,
+    ST_AsText(tracking.list.line) AS line,
+    ST_AsText(tracking.list.center) AS center,
+    tracking.list.zoom,
+    tracking.list.heading,
+    tracking.list.sharing,
+    tracking.list.likecount,
+    tracking.list.color,
+    tracking.list.thickness,
+    tracking.list.background,
+    tracking.list.createtime,
+    tracking.list.updatetime,
+    account.list.nickname,
+    account.list.img_url,
+    (CASE
+        WHEN tracking.like.user_idx IS NOT NULL THEN true
+        ELSE false
+    END) AS liked_by_user
+FROM 
+    tracking.list
+INNER JOIN
+    account.list
+ON
+    tracking.list.user_idx = account.list.idx
+LEFT JOIN
+    tracking.like
+ON
+    tracking.list.idx = tracking.like.tracking_idx
+    AND tracking.like.user_idx = $1
+WHERE 
+    tracking.list.user_idx = $1
+AND
+    tracking.list.sharing = false
 ORDER BY 
     idx DESC
 LIMIT
@@ -179,4 +227,4 @@ AND
 `
 
 
-module.exports = {createTrackingImgSQL,getMyTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL,toSharingImgSQL,toNotSharingImgSQL}
+module.exports = {createTrackingImgSQL,getMySharingTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL,toSharingImgSQL,toNotSharingImgSQL,getMyNotSharingTrackingImgSQL}
