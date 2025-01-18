@@ -9,7 +9,7 @@ const checkData = (what, input) => {
       req.query[input] ||
       req.decoded[input];
       console.log(value)
-    const sql = `SELECT * FROM ${what} WHERE idx = $1`;
+    const sql = `SELECT * FROM ${what} WHERE 2idx = $1`;
 
     try {
       const result = await client.query(sql, [value]);

@@ -1,6 +1,6 @@
 const client = require("../../database/postgreSQL")
 const customError = require("../../util/customError")
-const {createTrackingImgSQL,getMyTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL,toSharingImgSQL,toNotSharingImgSQL} = require("./sql")
+const {createTrackingImgSQL,getMySharingTrackingImgSQL,getMyNotSharingTrackingImgSQL,getUserTrackingImgSQL,deleteTrackingImgSQL,getTrackingLineSQL,putTrackingImageSQL,toSharingImgSQL,toNotSharingImgSQL} = require("./sql")
 const {convertMultiLine,convertCenterPoint,convertFromMultiLine,convertPointToLatLng} = require("../../util/util")
 
 
@@ -26,11 +26,23 @@ const createTrackingImg = async (req,res,next) => {
 
 // 나의 트래킹 이미지 가져오기
 const getMyTrackingImg = async (req,res,next) => {
-    const {page} = req.query
+    const {page,category} = req.query
     const user_idx = req.decoded.idx;
 
+    try {
+        if (category !== "1" && category !== "0") throw customError(400, `category 양식 오류`);
+    } catch (e) {
+        next(e);
+    }
+
+    let sql;
+
+    if(category == 1) sql = getMySharingTrackingImgSQL
+    else if (category == 0) sql = getMyNotSharingTrackingImgSQL
+    
     try{
-        const result = await client.query(getMyTrackingImgSQL, [user_idx,page])
+        const result = await client.query(sql, [user_idx,page])
+
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
             obj.center = convertPointToLatLng(obj.center)
