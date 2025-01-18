@@ -15,6 +15,8 @@ const createTrackingImg = async (req,res,next) => {
     const multiLine = convertMultiLine(line)
     const point = convertCenterPoint(center)
 
+    console.log(multiLine)
+
     try{
         await client.query(createTrackingImgSQL, [user_idx,multiLine,searchpoint,point,zoom,heading,sharing,color,thickness,background])
         res.status(200).send({})
