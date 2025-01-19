@@ -15,8 +15,6 @@ const createTrackingImg = async (req,res,next) => {
     const multiLine = convertMultiLine(line)
     const point = convertCenterPoint(center)
 
-    console.log(multiLine)
-
     try{
         await client.query(createTrackingImgSQL, [user_idx,multiLine,searchpoint,point,zoom,heading,sharing,color,thickness,background])
         res.status(200).send({})
@@ -48,6 +46,7 @@ const getMyTrackingImg = async (req,res,next) => {
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
             obj.center = convertPointToLatLng(obj.center)
+            obj.isMine = true
         });
         res.status(200).send({ tracking_image : result.rows })
     } catch(e){
@@ -67,6 +66,7 @@ const getUserTrackingImg = async (req,res,next) => {
         result.rows.forEach(obj => {
             obj.line = convertFromMultiLine(obj.line)
             obj.center = convertPointToLatLng(obj.center)
+            obj.isMine = false
         });
         res.status(200).send({ tracking_image : result.rows })
     }catch(e){
