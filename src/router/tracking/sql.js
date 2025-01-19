@@ -49,7 +49,7 @@ ORDER BY
 LIMIT
     20
 OFFSET
-    ($2 - 1) * 20
+    ($2 - 1) * 18
 `
 
 const getMyNotSharingTrackingImgSQL = 
@@ -95,7 +95,7 @@ ORDER BY
 LIMIT
     20
 OFFSET
-    ($2 - 1) * 20
+    ($2 - 1) * 18
 `
 
 const getUserTrackingImgSQL =
@@ -141,7 +141,7 @@ ORDER BY
 LIMIT
     20
 OFFSET
-    ($3 - 1) * 20
+    ($3 - 1) * 18
 `
 
 const deleteTrackingImgSQL = 
