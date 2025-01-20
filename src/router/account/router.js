@@ -65,6 +65,42 @@ router.get(
 
     await postRefreshTokenLogic(refreshToken, userIdx);
 
+    res.cookie("example", accessToken, refreshToken, {
+      h,
+    });
+
+    res.status(200).send({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+  })
+);
+
+router.get(
+  "/login/redirect/naver",
+  trycatchWrapper(async (req, res, next) => {
+    const { code, state } = req.query;
+    let accessToken;
+    let refreshToken;
+    let userIdx = null;
+
+    const naverId = await naverLoginRedirectLogic(code, state);
+    userIdx = await getUserIdxLogic("NAVER", naverId);
+
+    if (userIdx) {
+      accessToken = setAccessToken(userIdx);
+      refreshToken = setRefreshToken(userIdx);
+    } else {
+      const nickName = await getNickname(); //회원가입 과정
+      await postAccountLogic("NAVER", naverId, nickName);
+      userIdx = await getUserIdxLogic("NAVER", naverId);
+
+      accessToken = setAccessToken(userIdx);
+      refreshToken = setRefreshToken(userIdx);
+    }
+
+    await postRefreshTokenLogic(refreshToken, userIdx);
+
     res.status(200).send({
       access_token: accessToken,
       refresh_token: refreshToken,
@@ -132,7 +168,7 @@ router.delete(
 router.get(
   "/nickname",
   trycatchWrapper(async (req, res, next) => {
-    const list = getNicknameLogic(10);
+    const list = await getNicknameLogic(10);
     res.status(200).send({ nickname: list });
   })
 );
