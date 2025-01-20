@@ -65,6 +65,42 @@ router.get(
 
     await postRefreshTokenLogic(refreshToken, userIdx);
 
+    // res.cookie("example", accessToken, refreshToken, {
+    //   h,
+    // });
+
+    res.status(200).send({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+  })
+);
+
+router.get(
+  "/login/redirect/naver",
+  trycatchWrapper(async (req, res, next) => {
+    const { code, state } = req.query;
+    let accessToken;
+    let refreshToken;
+    let userIdx = null;
+
+    const naverId = await naverLoginRedirectLogic(code, state);
+    userIdx = await getUserIdxLogic("NAVER", naverId);
+
+    if (userIdx) {
+      accessToken = setAccessToken(userIdx);
+      refreshToken = setRefreshToken(userIdx);
+    } else {
+      const nickName = await getNickname(); //회원가입 과정
+      await postAccountLogic("NAVER", naverId, nickName);
+      userIdx = await getUserIdxLogic("NAVER", naverId);
+
+      accessToken = setAccessToken(userIdx);
+      refreshToken = setRefreshToken(userIdx);
+    }
+
+    await postRefreshTokenLogic(refreshToken, userIdx);
+
     res.status(200).send({
       access_token: accessToken,
       refresh_token: refreshToken,
@@ -78,11 +114,21 @@ router.get(
   checkLogin,
   trycatchWrapper(async (req, res, next) => {
     const { idx } = req.decoded;
-    const { userIdx, nickName, imgUrl } = await getAccountInf(idx);
+
+    const {
+      userIdx,
+      nickName,
+      imgUrl,
+      shareTrackingLength,
+      totalTrackingLength,
+    } = await getAccountInf(idx);
+
     res.status(200).send({
       idx: userIdx,
       nickname: nickName,
       image_url: imgUrl,
+      share_tracking_length: shareTrackingLength,
+      total_tracking_length: totalTrackingLength,
     });
   })
 );
@@ -100,18 +146,24 @@ router.get(
         authorization,
         process.env.ACCESS_TOKEN_SECRET
       );
-      console.log(userIdx);
-      console.log(idx);
       if (userIdx == idx) isMine = true;
     }
 
-    const { nickName, imgUrl } = await getAccountInf(userIdx);
+    const {
+      accountIdx,
+      nickName,
+      imgUrl,
+      shareTrackingLength,
+      totalTrackingLength,
+    } = await getAccountInf(userIdx);
 
     res.status(200).send({
-      idx: userIdx,
+      idx: accountIdx,
       nickname: nickName,
       image_url: imgUrl,
       isMine: isMine,
+      share_tracking_length: shareTrackingLength,
+      total_tracking_length: totalTrackingLength,
     });
   })
 );
@@ -132,7 +184,7 @@ router.delete(
 router.get(
   "/nickname",
   trycatchWrapper(async (req, res, next) => {
-    const list = getNicknameLogic(10);
+    const list = await getNicknameLogic(10);
     res.status(200).send({ nickname: list });
   })
 );
