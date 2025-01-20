@@ -16,8 +16,24 @@ const putRefreshTokenSql =
   "UPDATE account.list SET refresh_token=$1, expires_at=$2 WHERE idx=$3;";
 
 // 회원 정보 가져오기 sql문 ------------------------------------------
-const getAccountSql =
-  "SELECT idx, nickname, img_url FROM account.list WHERE idx=$1;";
+const getAccountSql = `
+SELECT
+  account.list.idx,
+  account.list.nickname,
+  account.list.img_url,
+  COUNT(CASE WHEN tracking.list.sharing = true THEN 1 END) AS share_tracking_length,
+  COUNT(tracking.list.idx) AS total_tracking_length
+FROM
+  account.list
+LEFT JOIN
+  tracking.list
+ON
+  account.list.idx = tracking.list.user_idx
+WHERE
+  account.list.idx = $1
+GROUP BY
+  account.list.idx, account.list.nickname, account.list.img_url;
+`;
 const getUserIdxGoogleSql =
   "SELECT idx FROM account.list WHERE google_user_id=$1;";
 const getUserIdxKakaoSql =

@@ -181,11 +181,19 @@ const getAccountInf = async (idx) => {
     throw customError(404, "user_idx가 존재하지 않습니다.");
   }
 
-  const userIdx = result.rows[0].idx;
+  const accountIdx = result.rows[0].idx;
   const nickName = result.rows[0].nickname;
   const imgUrl = result.rows[0].img_url;
+  const shareTrackingLength = result.rows[0].share_tracking_length;
+  const totalTrackingLength = result.rows[0].total_tracking_length;
 
-  return { userIdx, nickName, imgUrl };
+  return {
+    accountIdx,
+    nickName,
+    imgUrl,
+    shareTrackingLength,
+    totalTrackingLength,
+  };
 };
 
 // 회원 정보 변경------------------------------------------------------------------------
