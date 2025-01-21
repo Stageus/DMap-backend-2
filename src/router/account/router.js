@@ -33,53 +33,17 @@ const {
 } = require("./service");
 
 // 네이버 로그인
+// router.get(
+//   "/login/naver",
+//   trycatchWrapper((req, res, next) => {
+//     res.redirect(getNaverLoginPage());
+//   })
+// );
+
 router.get(
   "/login/naver",
-  trycatchWrapper((req, res, next) => {
-    res.redirect(getNaverLoginPage());
-  })
-);
-
-router.get(
-  "/login/redirect/naver",
   trycatchWrapper(async (req, res, next) => {
-    const { code, state } = req.query;
-    let accessToken;
-    let refreshToken;
-    let userIdx = null;
-
-    const naverId = await naverLoginRedirectLogic(code, state);
-    userIdx = await getUserIdxLogic("NAVER", naverId);
-
-    if (userIdx) {
-      accessToken = setAccessToken(userIdx);
-      refreshToken = setRefreshToken(userIdx);
-    } else {
-      const nickName = await getNickname(); //회원가입 과정
-      await postAccountLogic("NAVER", naverId, nickName);
-      userIdx = await getUserIdxLogic("NAVER", naverId);
-
-      accessToken = setAccessToken(userIdx);
-      refreshToken = setRefreshToken(userIdx);
-    }
-
-    await postRefreshTokenLogic(refreshToken, userIdx);
-
-    // res.cookie("example", accessToken, refreshToken, {
-    //   h,
-    // });
-
-    res.status(200).send({
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    });
-  })
-);
-
-router.get(
-  "/login/redirect/naver",
-  trycatchWrapper(async (req, res, next) => {
-    const { code, state } = req.query;
+    const { code, state } = req.body;
     let accessToken;
     let refreshToken;
     let userIdx = null;
@@ -116,7 +80,7 @@ router.get(
     const { idx } = req.decoded;
 
     const {
-      userIdx,
+      accountIdx,
       nickName,
       imgUrl,
       shareTrackingLength,
@@ -124,7 +88,7 @@ router.get(
     } = await getAccountInf(idx);
 
     res.status(200).send({
-      idx: userIdx,
+      idx: accountIdx,
       nickname: nickName,
       image_url: imgUrl,
       share_tracking_length: shareTrackingLength,
