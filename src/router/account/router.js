@@ -91,6 +91,7 @@ router.get(
       idx: accountIdx,
       nickname: nickName,
       image_url: imgUrl,
+      isMine: isMine,
       share_tracking_length: shareTrackingLength,
       total_tracking_length: totalTrackingLength,
     });
