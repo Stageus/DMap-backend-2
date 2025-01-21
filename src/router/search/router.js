@@ -23,7 +23,7 @@ router.get(
   trycatchWrapper(async (req, res, next) => {
     const { page } = req.query;
     const userIdx = req.decoded ? req.decoded.idx : null;
-    const { text } = req.body;
+    const { text } = req.query;
 
     const list = await searchPointLogic(userIdx, text, page);
 
