@@ -110,6 +110,9 @@ const checkLine = (input) => {
 
     function checkLineFunc(line) {
       for (let x of line) {
+        // line 배열을 순회하면서 하나라도 빈 배열일 경우 오류
+        if(x.length === 0) return false
+
         for (let point of x) {
           if (
             point.lat < -90 ||
