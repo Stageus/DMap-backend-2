@@ -184,8 +184,8 @@ const getAccountInf = async (idx) => {
   const accountIdx = result.rows[0].idx;
   const nickName = result.rows[0].nickname;
   const imgUrl = result.rows[0].img_url;
-  const shareTrackingLength = result.rows[0].share_tracking_length;
-  const totalTrackingLength = result.rows[0].total_tracking_length;
+  const shareTrackingLength = Number(result.rows[0].share_tracking_length);
+  const totalTrackingLength = Number(result.rows[0].total_tracking_length);
 
   return {
     accountIdx,
