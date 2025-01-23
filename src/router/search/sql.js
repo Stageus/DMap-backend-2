@@ -14,9 +14,9 @@ OFFSET
 `;
 const searchPointSearchSql = `
 SELECT 
-    tracking.list.idx AS tracking_idx,
+    tracking.list.idx AS idx,
     tracking.list.user_idx AS user_idx,
-    account.list.img_url AS image,
+    account.list.img_url AS img_url,
     tracking.list.searchpoint,
     ST_AsText(tracking.list.line) AS line,
     ST_X(tracking.list.center::geometry) AS longitude,
