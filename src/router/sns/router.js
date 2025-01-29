@@ -1,7 +1,7 @@
 const router = require("express").Router()
 
 const {regColor,searchPoint} = require("../../constant/regx")
-const {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter,checkCategory} = require("../../middleware/checkInput")
+const {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter,checkCategory,checkPage} = require("../../middleware/checkInput")
 const {checkData,checkTrackingIdxData,checkSetData,checkLike,checkNotLike} = require("../../middleware/checkData")
 
 const {checkLogin,optionalLogin} = require("../../middleware/checkLogin")
@@ -12,7 +12,7 @@ const {postLikeTrackingImg,deleteLikeTrackingImg,getWhatTrackingImage,getRecentT
 router.get("/",
     optionalLogin,
     checkCategory(),
-    checkIdx("page"),
+    checkPage(),
     getDefaultSNSPage
 )
 
