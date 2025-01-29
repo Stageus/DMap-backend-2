@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const {createTrackingImg,getMyTrackingImg,getUserTrackingImg,deleteTrackingImg,getTrackingLine,putTrackingImage,putToSharingTrackingImg,putToNotSharingTrackingImg} = require("./service")
 const {regColor,searchPoint} = require("../../constant/regx")
 const {checkLogin,optionalLogin} = require("../../middleware/checkLogin")
-const {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter,checkIdxList} = require("../../middleware/checkInput")
+const {checkRegInput,checkIdx,checkZoom,checkHeading,checkSharing,checkThickness,checkBackground,checkLine,checkCenter,checkIdxList,checkPage} = require("../../middleware/checkInput")
 const {checkData,checkTrackingIdxData,checkSetData} = require("../../middleware/checkData")
 
 
@@ -54,17 +54,17 @@ router.get("/account/:user_idx", async (req,res,next) => {
         }
         const my_idx = req.decoded.idx;
         if(my_idx != user_idx){
-            await checkIdx("page")
+            await checkPage()
             await checkData("account.list", "user_idx")
             return getUserTrackingImg(req, res, next);
         } else if (my_idx == user_idx){
             await checkIdx("idx")
-            await checkIdx("page")
+            await checkPage()
             await checkData("account.list","idx")
             return getMyTrackingImg(req,res,next);
         }
     } else {
-        await checkIdx("page")
+        await checkPage()
         await checkData("account.list","user_idx")
         return getUserTrackingImg(req,res,next)
     }

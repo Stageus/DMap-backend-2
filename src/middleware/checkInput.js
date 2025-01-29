@@ -192,6 +192,19 @@ const checkCategory = () => {
   };
 };
 
+const checkPage = () => {
+  return (req, res, next) => {
+    const { page } = req.query;
+
+    try {
+      if (page <= 0 || Number.isNaN(Number(page)) || !page) throw customError(400, `page 양식 오류`);
+      next();
+    } catch (e) {
+      next(e);
+    }
+  };
+}
+
 // 닉네임 값 인증
 const checkNickname = (input) => {
   return (req, res, next) => {
@@ -220,5 +233,6 @@ module.exports = {
   checkCenter,
   checkIdxList,
   checkCategory,
-  checkNickname
+  checkNickname,
+  checkPage
 };
