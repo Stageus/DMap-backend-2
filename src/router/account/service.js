@@ -167,6 +167,10 @@ const postRefreshTokenLogic = async (refreshToken, userIdx) => {
   ]);
 };
 
+const deleteRefreshTokenLogic = async (userIdx) => {
+  const result = await client.query(putRefreshTokenSql, [null, null, userIdx]);
+};
+
 // 닉네임--------------------------------------------------------------------------
 const { adjectives, nouns } = require("./../../constant/nickname");
 
@@ -292,6 +296,7 @@ module.exports = {
   setRefreshToken,
   isValidRefreshToken,
   postRefreshTokenLogic,
+  deleteRefreshTokenLogic,
 
   getNickname,
   getNicknameLogic,

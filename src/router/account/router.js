@@ -21,6 +21,7 @@ const {
   setRefreshToken,
   isValidRefreshToken,
   postRefreshTokenLogic,
+  deleteRefreshTokenLogic,
 
   getNickname,
   getNicknameLogic,
@@ -86,7 +87,7 @@ router.get(
 router.get(
   "/login/token/kakao",
   trycatchWrapper(async (req, res, next) => {
-    const { code, state } = req.body;
+    const { code, state } = req.query;
     let accessToken;
     let refreshToken;
     let userIdx = null;
@@ -112,6 +113,18 @@ router.get(
       access_token: accessToken,
       refresh_token: refreshToken,
     });
+  })
+);
+
+// 로그아웃 하기
+router.delete(
+  "/logout",
+  checkLogin,
+  trycatchWrapper(async (req, res, next) => {
+    const { idx } = req.decoded;
+    await deleteRefreshTokenLogic(idx);
+
+    res.status(200).send();
   })
 );
 
