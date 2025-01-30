@@ -47,7 +47,7 @@ router.get(
 router.get(
   "/login/token/naver",
   trycatchWrapper(async (req, res, next) => {
-    const { code, state } = req.body;
+    const { code, state } = req.query;
     let accessToken;
     let refreshToken;
     let userIdx = null;
