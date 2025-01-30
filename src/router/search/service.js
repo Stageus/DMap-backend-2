@@ -18,7 +18,7 @@ const searchPointLogic = async (userIdx, text, page) => {
     obj.line = convertFromMultiLine(obj.line);
     obj.center = {
       lat: obj.latitude,
-      lot: obj.longitude,
+      lng: obj.longitude,
     };
     delete obj.latitude;
     delete obj.longitude;
