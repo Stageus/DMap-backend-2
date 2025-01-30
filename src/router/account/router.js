@@ -40,7 +40,7 @@ const {
 router.get(
   "/login/url/naver",
   trycatchWrapper((req, res, next) => {
-    res.redirect(getNaverLoginPage());
+    res.status(200).send({ url: getNaverLoginPage() });
   })
 );
 
@@ -80,7 +80,7 @@ router.get(
 router.get(
   "/login/url/kakao",
   trycatchWrapper((req, res, next) => {
-    res.redirect(getKakaoLoginPage());
+    res.status(200).send({ url: getKakaoLoginPage() });
   })
 );
 
