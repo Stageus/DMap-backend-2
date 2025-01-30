@@ -35,7 +35,7 @@ const getNaverLoginPage = () => {
   return naverAuthUrl;
 };
 
-const naverLoginRedirectLogic = async (code, state) => {
+const naverLoginLogic = async (code, state) => {
   const tokenResponse = await axios.post(
     "https://nid.naver.com/oauth2.0/token",
     null,
@@ -59,6 +59,47 @@ const naverLoginRedirectLogic = async (code, state) => {
   });
 
   return userResponse.data.response.id;
+};
+
+// 카카오 OAuth2---------------------------------------------------------------------------------
+const getKakaoLoginPage = () => {
+  const state = crypto.randomBytes(16).toString("hex"); // CSRF 방지용 상태값
+  const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+    process.env.KAKAO_CLIENT_ID
+  }&redirect_uri=${encodeURIComponent(
+    process.env.KAKAO_REDIRECT_URL
+  )}&state=${state}`;
+
+  return kakaoAuthUrl;
+};
+
+const kakaoLoginLogic = async (code, state) => {
+  const tokenResponse = await axios.post(
+    "https://kauth.kakao.com/oauth/token",
+    new URLSearchParams({
+      grant_type: "authorization_code",
+      client_id: process.env.KAKAO_CLIENT_ID,
+      redirect_uri: process.env.KAKAO_REDIRECT_URL,
+      client_secret: process.env.KAKAO_CLIENT_SECRET,
+      code: code,
+      state: state,
+    }).toString(),
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+    }
+  );
+
+  const kakaoAccessToken = tokenResponse.data.access_token;
+
+  const userResponse = await axios.get("https://kapi.kakao.com/v2/user/me", {
+    headers: {
+      Authorization: `Bearer ${kakaoAccessToken}`,
+    },
+  });
+
+  return userResponse.data.id;
 };
 
 // 계정확인-------------------------------------------------------------------------
@@ -238,7 +279,10 @@ const putImageLogic = async (imageUrl, userIdx) => {
 
 module.exports = {
   getNaverLoginPage,
-  naverLoginRedirectLogic,
+  naverLoginLogic,
+
+  getKakaoLoginPage,
+  kakaoLoginLogic,
 
   getUserIdxLogic,
 

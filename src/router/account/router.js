@@ -8,7 +8,10 @@ const jwt = require("jsonwebtoken");
 const { checkNicknameSql } = require("./sql");
 const {
   getNaverLoginPage,
-  naverLoginRedirectLogic,
+  naverLoginLogic,
+
+  getKakaoLoginPage,
+  kakaoLoginLogic,
 
   getUserIdxLogic,
 
@@ -48,7 +51,7 @@ router.get(
     let refreshToken;
     let userIdx = null;
 
-    const naverId = await naverLoginRedirectLogic(code, state);
+    const naverId = await naverLoginLogic(code, state);
     userIdx = await getUserIdxLogic("NAVER", naverId);
 
     if (userIdx) {
@@ -58,6 +61,46 @@ router.get(
       const nickName = await getNickname(); //회원가입 과정
       await postAccountLogic("NAVER", naverId, nickName);
       userIdx = await getUserIdxLogic("NAVER", naverId);
+
+      accessToken = setAccessToken(userIdx);
+      refreshToken = setRefreshToken(userIdx);
+    }
+
+    await postRefreshTokenLogic(refreshToken, userIdx);
+
+    res.status(200).send({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+  })
+);
+
+// 카카오 로그인
+router.get(
+  "/login/url/kakao",
+  trycatchWrapper((req, res, next) => {
+    res.redirect(getKakaoLoginPage());
+  })
+);
+
+router.get(
+  "/login/token/kakao",
+  trycatchWrapper(async (req, res, next) => {
+    const { code, state } = req.body;
+    let accessToken;
+    let refreshToken;
+    let userIdx = null;
+
+    const kakaoId = await kakaoLoginLogic(code, state);
+    userIdx = await getUserIdxLogic("KAKAO", kakaoId);
+
+    if (userIdx) {
+      accessToken = setAccessToken(userIdx);
+      refreshToken = setRefreshToken(userIdx);
+    } else {
+      const nickName = await getNickname(); //회원가입 과정
+      await postAccountLogic("KAKAO", kakaoId, nickName);
+      userIdx = await getUserIdxLogic("KAKAO", kakaoId);
 
       accessToken = setAccessToken(userIdx);
       refreshToken = setRefreshToken(userIdx);
@@ -181,16 +224,6 @@ router.put(
     await putImageLogic(req.file.location, idx);
 
     res.status(200).send({ message: "이미지 수정 성공" });
-  })
-);
-
-router.delete(
-  "/image",
-  checkLogin,
-  trycatchWrapper(async (req, res, next) => {
-    const { idx } = req.decoded;
-    await putImageLogic(null, idx);
-    res.status(200).send({ message: "이미지 삭제 성공" });
   })
 );
 
