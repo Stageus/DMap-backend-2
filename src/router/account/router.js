@@ -33,15 +33,15 @@ const {
 } = require("./service");
 
 // 네이버 로그인
-// router.get(
-//   "/login/naver",
-//   trycatchWrapper((req, res, next) => {
-//     res.redirect(getNaverLoginPage());
-//   })
-// );
+router.get(
+  "/login/url/naver",
+  trycatchWrapper((req, res, next) => {
+    res.redirect(getNaverLoginPage());
+  })
+);
 
 router.get(
-  "/login/naver",
+  "/login/token/naver",
   trycatchWrapper(async (req, res, next) => {
     const { code, state } = req.body;
     let accessToken;
