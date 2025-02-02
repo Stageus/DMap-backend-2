@@ -58,10 +58,21 @@ router.get(
     const { code, state, platform } = req.query;
     let accessToken;
     let refreshToken;
-    let userIdx = null;
+    let platformId;
+    let userIdx;
 
-    const naverId = await naverLoginLogic(code, state);
-    userIdx = await getUserIdxLogic(platform, naverId);
+    if (platform == "NAVER") {
+      platformId = await naverLoginLogic(code, state);
+    } else if (platform == "KAKAO") {
+      platformId = await kakaoLoginLogic(code, state);
+    } else {
+      res.status(400).send({
+        message: "잘못된 platform입니다.",
+      });
+      return;
+    }
+
+    userIdx = await getUserIdxLogic(platform, platformId);
 
     if (userIdx) {
       accessToken = setAccessToken(userIdx);
