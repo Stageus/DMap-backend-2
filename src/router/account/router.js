@@ -79,8 +79,8 @@ router.get(
       refreshToken = setRefreshToken(userIdx);
     } else {
       const nickName = await getNickname(); //회원가입 과정
-      await postAccountLogic(platform, naverId, nickName);
-      userIdx = await getUserIdxLogic(platform, naverId);
+      await postAccountLogic(platform, platformId, nickName);
+      userIdx = await getUserIdxLogic(platform, platformId);
 
       accessToken = setAccessToken(userIdx);
       refreshToken = setRefreshToken(userIdx);
