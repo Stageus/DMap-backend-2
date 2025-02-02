@@ -44,38 +44,6 @@ router.get(
   })
 );
 
-router.get(
-  "/login/token/naver",
-  trycatchWrapper(async (req, res, next) => {
-    const { code, state } = req.query;
-    let accessToken;
-    let refreshToken;
-    let userIdx = null;
-
-    const naverId = await naverLoginLogic(code, state);
-    userIdx = await getUserIdxLogic("NAVER", naverId);
-
-    if (userIdx) {
-      accessToken = setAccessToken(userIdx);
-      refreshToken = setRefreshToken(userIdx);
-    } else {
-      const nickName = await getNickname(); //회원가입 과정
-      await postAccountLogic("NAVER", naverId, nickName);
-      userIdx = await getUserIdxLogic("NAVER", naverId);
-
-      accessToken = setAccessToken(userIdx);
-      refreshToken = setRefreshToken(userIdx);
-    }
-
-    await postRefreshTokenLogic(refreshToken, userIdx);
-
-    res.status(200).send({
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    });
-  })
-);
-
 // 카카오 로그인
 router.get(
   "/login/url/kakao",
@@ -85,23 +53,23 @@ router.get(
 );
 
 router.get(
-  "/login/token/kakao",
+  "/login/token",
   trycatchWrapper(async (req, res, next) => {
-    const { code, state } = req.query;
+    const { code, state, platform } = req.query;
     let accessToken;
     let refreshToken;
     let userIdx = null;
 
-    const kakaoId = await kakaoLoginLogic(code, state);
-    userIdx = await getUserIdxLogic("KAKAO", kakaoId);
+    const naverId = await naverLoginLogic(code, state);
+    userIdx = await getUserIdxLogic(platform, naverId);
 
     if (userIdx) {
       accessToken = setAccessToken(userIdx);
       refreshToken = setRefreshToken(userIdx);
     } else {
       const nickName = await getNickname(); //회원가입 과정
-      await postAccountLogic("KAKAO", kakaoId, nickName);
-      userIdx = await getUserIdxLogic("KAKAO", kakaoId);
+      await postAccountLogic(platform, naverId, nickName);
+      userIdx = await getUserIdxLogic(platform, naverId);
 
       accessToken = setAccessToken(userIdx);
       refreshToken = setRefreshToken(userIdx);
