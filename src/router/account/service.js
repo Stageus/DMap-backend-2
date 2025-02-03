@@ -13,6 +13,8 @@ const {
   getUserIdxKakaoSql,
   getUserIdxNaverSql,
 
+  getUserImageSql,
+
   getRefreshTokenSql,
   putRefreshTokenSql,
 
@@ -278,7 +280,21 @@ const uploadS3 = multer({
 });
 
 const putImageLogic = async (imageUrl, userIdx) => {
+  const imageResult = await client.query(getUserImageSql, [userIdx]);
+  if (imageResult.rows[0].img_url) {
+    const oldImageUrl = imageResult.rows[0].img_url;
+    await deleteImage(oldImageUrl);
+  }
   const result = await client.query(putImageSql, [imageUrl, userIdx]);
+};
+
+const deleteImage = async (imageUrl) => {
+  const fileName = imageUrl.split("/").pop();
+  const deleteParams = {
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: fileName,
+  };
+  await s3.send(new DeleteObjectCommand(deleteParams));
 };
 
 module.exports = {

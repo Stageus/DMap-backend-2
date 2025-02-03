@@ -41,6 +41,15 @@ const getUserIdxKakaoSql =
 const getUserIdxNaverSql =
   "SELECT idx FROM account.list WHERE naver_user_id=$1;";
 
+const getUserImageSql = `
+SELECT
+  img_url
+FROM
+  account.list
+WHERE
+  idx=$1
+  `;
+
 // 회원 정보 변경 sql문 -------------------------------------------
 const putNicknameSql = "UPDATE account.list SET nickname=$1 WHERE idx=$2;";
 const putImageSql = "UPDATE account.list SET img_url=$1 WHERE idx=$2;";
@@ -59,6 +68,8 @@ module.exports = {
   getUserIdxGoogleSql,
   getUserIdxKakaoSql,
   getUserIdxNaverSql,
+
+  getUserImageSql,
 
   getRefreshTokenSql,
   putRefreshTokenSql,
