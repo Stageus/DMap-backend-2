@@ -91,6 +91,7 @@ router.get(
     res.status(200).send({
       access_token: accessToken,
       refresh_token: refreshToken,
+      user_idx: userIdx,
     });
   })
 );
